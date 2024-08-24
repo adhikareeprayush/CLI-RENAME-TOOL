@@ -2,6 +2,9 @@
 #include <iostream>
 #include <string>
 #include <functional>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 void printUsage() {
     std::cout << "Usage:" << std::endl;
@@ -20,9 +23,13 @@ void printUsage() {
     std::cout << "  suffix <directory> <pattern> <suffix>" << std::endl;
     std::cout << "  replace <directory> <pattern> <old_text> <new_text>" << std::endl;
     std::cout << "  regex <directory> <pattern> <regex> <replacement>" << std::endl;
+    std::cout << "  batch <directory> <prefix> [start_number]" << std::endl;
 }
 
 int main(int argc, char* argv[]) {
+
+    RenameTool::executableName = fs::path(argv[0]).filename().string();
+
     RenameTool::Options options;
     std::vector<std::string> args;
 
@@ -63,6 +70,13 @@ int main(int argc, char* argv[]) {
     } else if (command == "regex" && args.size() == 5) {
         RenameTool::renameMultiple(args[1], args[2],
             [&](const std::string& name) { return RenameTool::regexReplace(name, args[3], args[4]); }, options);
+    } else if (command == "batch" && (args.size() == 3 || args.size() == 4)) {
+        int startNumber = (args.size() == 4) ? std::stoi(args[3]) : 1;
+        RenameTool::renameAll(args[1],
+            [&](const std::string& name, int count) -> std::string {
+                fs::path p(name);
+                return args[2] + std::to_string(startNumber + count) + p.extension().string();
+            }, options);
     } else {
         printUsage();
         return 1;
