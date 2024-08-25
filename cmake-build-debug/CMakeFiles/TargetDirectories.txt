@@ -1,0 +1,3 @@
+C:/Users/prayu/Desktop/CLI-ToolKit/cmake-build-debug/CMakeFiles/rename-tool.dir
+C:/Users/prayu/Desktop/CLI-ToolKit/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/prayu/Desktop/CLI-ToolKit/cmake-build-debug/CMakeFiles/rebuild_cache.dir
